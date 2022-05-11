@@ -11,7 +11,7 @@ public abstract class Interactable : MonoBehaviour
     private float radius;
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         if(Vector3.Distance(this.transform.position, player.transform.position) <= radius)
         {
