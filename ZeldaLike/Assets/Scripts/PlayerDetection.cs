@@ -26,12 +26,13 @@ public class PlayerDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(hitGround);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals("ground"))
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag.Equals("Ground"))
         {
             if (Physics.Raycast(this.transform.position, Vector3.down, out RaycastHit hit, 1.25f, mask))
             {
@@ -52,7 +53,7 @@ public class PlayerDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag.Equals("ground"))
+        if (other.gameObject.tag.Equals("Ground"))
         {
             normal = Vector3.up;
             hitGround = false;
