@@ -30,6 +30,18 @@ public class PlayerStats : MonoBehaviour
         {
             Damage();
         }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            GainHealth(1);
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            RestoreHealth();
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            IncreaseMaxHealth();
+        }
     }
 
     /// <summary>
@@ -50,6 +62,36 @@ public class PlayerStats : MonoBehaviour
                 this.currCooldown = this.damageCooldown;
             }
         }
+    }
+
+    /// <summary>
+    /// Regains specific amount of health
+    /// </summary>
+    /// <param name="restore"></param>
+    public void GainHealth(int restore)
+    {
+        this.currHealth += restore;
+        this.currHealth = (this.currHealth > this.maxHealth ? this.maxHealth : this.currHealth);
+    }
+
+    /// <summary>
+    /// Fully restores health. To only regain part of the health, use "GainHealth" function
+    /// </summary>
+    public void RestoreHealth()
+    {
+        this.currHealth = this.maxHealth;
+    }
+
+    public void IncreaseMaxHealth(int increase=1, bool restoreHealth=true)
+    {
+        this.maxHealth += increase;
+        if (restoreHealth)
+            RestoreHealth();
+    }
+
+    public int GetHealth()
+    {
+        return this.currHealth;
     }
 
     private void Die()
