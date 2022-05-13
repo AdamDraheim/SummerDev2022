@@ -96,15 +96,18 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
 
+        //Decreases time to zero for the jump cooldown
         currJumpCoolDown -= Time.deltaTime;
         currJumpCoolDown = (currJumpCoolDown <= 0 ? 0 : currJumpCoolDown);
 
+        //Continue if player is hitting the ground
         if (this.GetComponentInChildren<PlayerDetection>().HitGround())
         {
+            //Reset the ground variables
             currJumps = 0;
             currGroundMissGimme = groundMissGimme;
             
-
+            //Set the movement to match the camera rotation instead of air velocity
             Vector3 newAcceleration = GetBaseMovementOnInput() * acceleration;
             newAcceleration = RotateMovementTowardCameraAngle(newAcceleration);
             curr_acceleration = SetMovementToMatchGroundNormal(newAcceleration);
@@ -112,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
             this.GetComponent<Rigidbody>().velocity += curr_acceleration * Time.deltaTime;
             EnsureMaxSpeedReached();
 
+            //Apply friction forces if player is not active
             if (noinput)
             {
                 ApplyBraking();
@@ -121,15 +125,24 @@ public class PlayerMovement : MonoBehaviour
             
         }
         else
+        //Player is in the air
         {
+
+            //Allow some relaxation on how late after the ground player can jump. To account for movement discrepancy
+            //across the terrain or being nice to player reaction time
             currGroundMissGimme -= Time.deltaTime;
             currGroundMissGimme = (currGroundMissGimme < 0 ? 0 : currGroundMissGimme);
 
+            //Apply an acceleration in direction of camera, if air direction changing is allowed
             Vector3 currAcc = GetBaseMovementOnInput();
             currAcc = RotateMovementTowardCameraAngle(currAcc);
             ApplyAirMovement(currAcc);
+
+            //Calculate and apply gravity
             HandleGravityVector();
             this.GetComponent<Rigidbody>().velocity += curr_acceleration * Time.deltaTime;
+
+            //Unlike ground which must check in 3D, max Airspeed has a horizontal air speed (x-z) and a vertical air speed (y)
             EnforceMaxAirSpeed();
 
             //If the player has been off the ground short enough time let them do a ground jump
