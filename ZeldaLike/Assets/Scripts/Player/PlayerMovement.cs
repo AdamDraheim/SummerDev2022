@@ -406,4 +406,19 @@ public class PlayerMovement : MonoBehaviour
         return PlayerCamera.playerCam.GetCameraRotation() * Vector3.forward;
     }
     #endregion
+
+    public bool HasInput()
+    {
+        return !noinput;
+    }
+
+    public bool IsGrounded()
+    {
+        return this.GetComponentInChildren<PlayerDetection>().HitGround();
+    }
+
+    public Vector2 GetHorizVel()
+    {
+        return new Vector2(this.GetComponent<Rigidbody>().velocity.x, this.GetComponent<Rigidbody>().velocity.z);
+    }
 }
